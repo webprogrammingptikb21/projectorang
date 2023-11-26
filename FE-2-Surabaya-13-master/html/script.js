@@ -1,36 +1,43 @@
-var slideIndex = 1;
-showSlide(slideIndex);
+document.addEventListener("DOMContentLoaded", function () {
+  // Menangkap elemen-elemen yang diperlukan
+  let carousels = document.querySelectorAll(".carousel-container");
 
-function nextslide(n) {
-  showSlide((slideIndex += n));
-}
+  // Iterasi melalui setiap carousel
+  carousels.forEach(function (carousel) {
+    let carouselWrapper = carousel.querySelector(".carousel-wrapper");
+    let prevBtn = carousel.querySelector(".prevBtn");
+    let nextBtn = carousel.querySelector(".nextBtn");
+    let carouselWidth = carousel.clientWidth;
+    let currentSlide = 0;
 
-function dotslide(n) {
-  showSlide((slideIndex = n));
-}
+    // Fungsi untuk menampilkan slide berikutnya
+    function showNextSlide() {
+      if (currentSlide < 2) {
+        currentSlide++;
+      } else {
+        currentSlide = 0;
+      }
+      updateCarousel();
+    }
 
-function showSlide(n) {
-  var i;
-  var slides = document.getElementsByClassName("imgslide");
-  var dot = document.getElementsByClassName("dot");
+    // Fungsi untuk menampilkan slide sebelumnya
+    function showPrevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+      } else {
+        currentSlide = 2;
+      }
+      updateCarousel();
+    }
 
-  if (n > slides.length) {
-    slideIndex = 1;
-  }
+    // Fungsi untuk memperbarui tampilan carousel
+    function updateCarousel() {
+      let newTransformValue = -currentSlide * 350 + "px";
+      carouselWrapper.style.transform = "translateX(" + newTransformValue + ")";
+    }
 
-  if (n < 1) {
-    slideIndex = slides.length;
-  }
-
-  for (i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
-  }
-
-  for (i = 0; i < slides.length; i++) {
-    dot[i].className = dot[i].className.replace(" active", "");
-  }
-
-  slides[slideIndex - 1].style.display = "block";
-
-  dot[slideIndex - 1].className += " active";
-}
+    // Menambahkan event listener untuk tombol "next" dan "previous"
+    nextBtn.addEventListener("click", showNextSlide);
+    prevBtn.addEventListener("click", showPrevSlide);
+  });
+});
